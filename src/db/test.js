@@ -42,6 +42,7 @@ function writeFile(data, fileName) {
 const parsePage = async href => {
     let res = await axios.get(urlBase + href)
 	const $ = cheerio.load(res.data);
+	const title = $('.allset-page-heading h1').text();
 	const sents = $('.liju ul:not(.dialog) li:not(.x, .q)')
 	const pinyin = sents.children('.pinyin').remove()
 	const trans = sents.children('.trans').remove()
@@ -51,7 +52,7 @@ const parsePage = async href => {
 			const py = $(pinyin[i]).text()
 			const eng = $(trans[i]).text()
 			if (zh != "" && eng != "") {
-				parse.push({zh,py,eng})
+				parse.push({href,title,zh,py,eng})
 			} else {
 				droppedModel.push({href,zh,py,eng})
 			}
